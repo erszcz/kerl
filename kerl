@@ -904,6 +904,8 @@ endif
 rehash
 ACTIVATE_CSH
     if [ -n "$KERL_INSTALL_DOCSH" ]; then
+        # TODO: SHOULD properly check for the shell
+        # see https://github.com/fish-shell/fish-shell/issues/374
         case $(basename $SHELL) in
         csh|tcsh)
             source $absdir/activate.csh
