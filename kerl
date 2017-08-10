@@ -74,6 +74,9 @@ fi
 if [ -n "$KERL_INSTALL_HTMLDOCS" ]; then
     _KIHD="$KERL_INSTALL_HTMLDOCS"
 fi
+if [ -n "$KERL_INSTALL_DOCSH" ]; then
+    _KIDS="$KERL_INSTALL_DOCSH"
+fi
 if [ -n "$KERL_BUILD_PLT" ]; then
     _KBPLT="$KERL_BUILD_PLT"
 fi
@@ -92,6 +95,7 @@ KERL_DEPLOY_SSH_OPTIONS=
 KERL_DEPLOY_RSYNC_OPTIONS=
 KERL_INSTALL_MANPAGES=
 KERL_INSTALL_HTMLDOCS=
+KERL_INSTALL_DOCSH=
 KERL_BUILD_PLT=
 KERL_BUILD_DOCS=
 KERL_BUILD_BACKEND=
@@ -128,6 +132,9 @@ if [ -n "$_KIM" ]; then
 fi
 if [ -n "$_KIHD" ]; then
     KERL_INSTALL_HTMLDOCS="$_KIHD"
+fi
+if [ -n "$_KIDS" ]; then
+    KERL_INSTALL_DOCSH="$_KIDS"
 fi
 if [ -n "$_KBPLT" ]; then
     KERL_BUILD_PLT="$_KBPLT"
@@ -896,6 +903,21 @@ endif
 
 rehash
 ACTIVATE_CSH
+    if [ -n "$KERL_INSTALL_DOCSH" ]; then
+        case $(basename $SHELL) in
+        csh|tcsh)
+            source $absdir/activate.csh
+            ;;
+        fish)
+            . $absdir/activate.fish
+            ;;
+        *)
+            . $absdir/activate
+            ;;
+        esac
+        install_docsh $1
+        kerl_deactivate
+    fi
     if [ -n "$KERL_BUILD_DOCS" ]; then
         DOC_DIR="$KERL_BUILD_DIR/$1/release_$rel/lib/erlang"
         if [ -d "$DOC_DIR" ]; then
